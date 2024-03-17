@@ -32,7 +32,7 @@ namespace Whetstone.ChatGPT.Blazor.App.Components
         public Func<string, MarkupString> FormatPromptResponse { get; set; } = FormatResponse;
 
         [Parameter]
-        public int DefaultMaxTokens { get; set; } = 200;
+        public int DefaultMaxTokens { get; set; } = 2000;
 
         private MarkupString? PromptResponse { get; set; } = default!;
 

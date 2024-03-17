@@ -67,7 +67,9 @@ namespace Whetstone.ChatGPT.Blazor.App.Components
 
                 if (cancelTokenSource.TryReset())
                 {
-                    if(compOptions.SelectedModel!.StartsWith("gpt-4") || compOptions.SelectedModel.StartsWith("gpt-3.5"))
+                    if(compOptions.SelectedModel!.StartsWith("gpt-4") 
+                       || compOptions.SelectedModel.StartsWith("gpt-3.5")
+                       || compOptions.SelectedModel.StartsWith("custom"))
                     {
                         ChatGPTChatCompletionRequest gptChatCompletionRequest = new()
                         {
@@ -75,8 +77,13 @@ namespace Whetstone.ChatGPT.Blazor.App.Components
                             {
                                 new ChatGPTChatCompletionMessage()
                                 {
-                                    Content = completionRequest.Prompt,
+                                    Content = "You are an experience software developer. You always provide well-reasoned answers that are both correct and helpful. if you are not sure of something, you must not provide an answer.",
                                     Role = ChatGPTMessageRoles.System
+                                },
+                                new ChatGPTChatCompletionMessage()
+                                {
+                                    Content = completionRequest.Prompt,
+                                    Role = ChatGPTMessageRoles.User
                                 }
                             },
                             Model = compOptions.SelectedModel,

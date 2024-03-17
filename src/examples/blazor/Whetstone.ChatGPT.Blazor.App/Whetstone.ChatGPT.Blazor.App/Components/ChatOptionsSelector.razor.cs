@@ -13,9 +13,9 @@ namespace Whetstone.ChatGPT.Blazor.App.Components
     {
 
         [Parameter]
-        public float Temperature { get; set; } = 0.1f;
+        public float Temperature { get; set; } = 0.7f;
 
-        public string? SelectedModel { get; set; } = null;
+        public string? SelectedModel { get; set; }
 
         [Parameter]
         public EventCallback<Exception> OnException { get; set; }
@@ -24,10 +24,10 @@ namespace Whetstone.ChatGPT.Blazor.App.Components
         public EventCallback<CompletionOptions> OnCompletionOptionsChanged { get; set; }
 
         [Parameter]
-        public int MaxTokens { get; set; } = 200;
+        public int MaxTokens { get; set; } = 4000;
 
         [CascadingParameter]
-        public int? DefaultMaxTokens { get; set; } = null;
+        public int? DefaultMaxTokens { get; set; } = 2000;
 
         private IEnumerable<ChatGPTModel>? models = default!;
 
@@ -36,14 +36,19 @@ namespace Whetstone.ChatGPT.Blazor.App.Components
         {
             try
             {
+                ChatClient.Credentials = new ChatGPTCredentials();
+                
                 ChatGPTListResponse<ChatGPTModel>? listResponse = await ChatClient.ListModelsAsync();
 
                 if(listResponse?.Data is not null)
                 {
+                    foreach (var item in listResponse.Data.Where(item => item.Id != null && item.Id.Contains('\\')))
+                        item.Id = item.Id?.Split('\\').LastOrDefault();
+
                     models = listResponse.Data.OrderBy(x => x.Id);
                 }
 
-                SelectedModel = ChatGPT35Models.Gpt35TurboInstruct;
+                SelectedModel = LmStudioModels.CustomModel;
 
                 if (DefaultMaxTokens is not null)
                 {

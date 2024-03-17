@@ -23,7 +23,6 @@ namespace Whetstone.ChatGPT.Blazor.App
             _chatClient = chatClient ?? throw new ArgumentNullException(nameof(chatClient));
             _localStorage = localStorage ?? throw new ArgumentNullException(nameof(localStorage));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
         }
 
         public async Task<bool> GetStoreCredentialsLocalOption()
@@ -49,6 +48,13 @@ namespace Whetstone.ChatGPT.Blazor.App
                 throw new ArgumentNullException(nameof(appState));
             }
 
+            if (credentials.ApiKey != null &&
+                credentials.ApiKey.Equals("LMStudio", StringComparison.CurrentCultureIgnoreCase))
+            {
+                appState.IsOpenAIAuthenticated = true;
+                return true;
+            }
+            
             bool isValid = false;
 
             appState.IsOpenAIAuthenticated = false;

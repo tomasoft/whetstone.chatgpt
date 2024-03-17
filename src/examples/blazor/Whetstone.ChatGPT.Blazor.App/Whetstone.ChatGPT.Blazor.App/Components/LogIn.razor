@@ -15,7 +15,7 @@
               <Validation>
                     <Field>
                         <FieldLabel>API Key</FieldLabel>
-                        <TextEdit Role="TextRole.Password" @bind-Text="credentials.ApiKey" Placeholder="API Key">
+                        <TextEdit Role="TextRole.Password" @bind-Text="credentials.ApiKey" Placeholder="API Key, use LmStudio for use with LMStudio">
                             <Feedback>
                                 <ValidationError/>
                             </Feedback>
@@ -33,7 +33,8 @@
             <Blazorise.Bootstrap5.Button Float="Float.End" Color="Color.Primary" Type="ButtonType.Submit" Loading="@isLoading" Disabled="@isLoading" Clicked="@ValidateCredentialsAsync">
             @if (authenticationSucceeded)
             {
-               <Blazorise.Icons.FontAwesome.Icon Name="IconName.Check" IconSize="IconSize.Large"></Blazorise.Icons.FontAwesome.Icon>
+                <Blazorise.Icons.FontAwesome.Icon Name="IconName.Check" IconSize="IconSize.Large"></Blazorise.Icons.FontAwesome.Icon>
+                loginDialog?.Hide();
             } Apply
             </Blazorise.Bootstrap5.Button>
        </ModalFooter>

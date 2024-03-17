@@ -35,5 +35,4 @@ void AddBlazorise(IServiceCollection services)
     services
         .AddBootstrap5Providers()
         .AddFontAwesomeIcons();
-
 }
