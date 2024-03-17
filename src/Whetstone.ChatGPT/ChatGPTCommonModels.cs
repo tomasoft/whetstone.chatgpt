@@ -237,6 +237,8 @@ namespace Whetstone.ChatGPT
         public readonly static string Ada = "text-ada-001";
 
         public readonly static string Gpt35TurboInstruct = "gpt-3.5-turbo-instruct";
+        
+        public readonly static string LMStudioModel = "lmstudio-selected-model";
     }
 
     public static class ChatGPTEmbeddingModels
@@ -245,6 +247,11 @@ namespace Whetstone.ChatGPT
 
         [Obsolete("This model will not be supported as of 2024-01-04. Please use text-embedding-ada-002 instead.")]
         public readonly static string AdaSearch = "text-search-ada-doc-001";
+    }
+    
+    public static class LmStudioModels
+    {
+        public readonly static string CustomModel = "custom-provided-model";
     }
     
     public static class ChatGPTMessageRoles

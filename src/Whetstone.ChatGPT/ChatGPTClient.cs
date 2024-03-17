@@ -113,7 +113,7 @@ public class ChatGPTClient : IChatGPTClient
     private void InitializeClient(HttpClient client)
     {
 
-        client.BaseAddress = new Uri("https://api.openai.com/v1/");
+        client.BaseAddress = string.IsNullOrEmpty(_chatCredentials?.ApiKey) ? new Uri("http://localhost:1234/v1/") : new Uri("https://api.openai.com/v1/");
 
         if (!string.IsNullOrWhiteSpace(_client.DefaultRequestHeaders.Authorization?.Parameter))
         {
@@ -279,7 +279,9 @@ public class ChatGPTClient : IChatGPTClient
 
         completionRequest.Stream = false;
 
-        return await SendRequestAsync<ChatGPTCompletionRequest, ChatGPTCompletionResponse>(HttpMethod.Post, "completions", completionRequest, cancellationToken);
+        var sendRequestUrl = completionRequest.Model == "lmstudio-selected-model" ? "chat/completions" : "completions";
+        
+        return await SendRequestAsync<ChatGPTCompletionRequest, ChatGPTCompletionResponse>(HttpMethod.Post, sendRequestUrl, completionRequest, cancellationToken);
     }
 
     /// <inheritdoc cref="IChatGPTClient.ListModelsAsync"/>
@@ -1179,11 +1181,8 @@ public class ChatGPTClient : IChatGPTClient
             throw new ChatGPTConfigurationException("ChatGPTCredentials are null.");
         }
 
-        if (string.IsNullOrWhiteSpace(_chatCredentials.ApiKey))
-        {
-            throw new ChatGPTConfigurationException("ApiKey property cannot be null or whitespace.");
-        }
-
+        if (string.IsNullOrWhiteSpace(_chatCredentials.ApiKey)) return request;
+        
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _chatCredentials.ApiKey);
 
         if (!string.IsNullOrWhiteSpace(_chatCredentials.Organization))

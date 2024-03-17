@@ -71,6 +71,61 @@ namespace Whetstone.ChatGPT.Test
                 Assert.True(!string.IsNullOrWhiteSpace(response.GetCompletionText()));
             }
         }
+        
+        [Fact]
+        public async Task TestLmStudioRequest()
+        {
+            var gptRequest = new ChatGPTChatCompletionRequest
+            {
+                Model = LmStudioModels.CustomModel,
+                Messages = new List<ChatGPTChatCompletionMessage>()
+                    {
+                        new ChatGPTChatCompletionMessage()
+                        {
+                            Role = ChatGPTMessageRoles.System,
+                            Content = "You are a helpful assistant."
+                        },
+                        new ChatGPTChatCompletionMessage()
+                        {
+                            Role = ChatGPTMessageRoles.User,
+                            Content = "Who won the world series in 2020?"
+                        },
+                        new ChatGPTChatCompletionMessage()
+                        {
+                            Role = ChatGPTMessageRoles.Assistant,
+                            Content = "The Los Angeles Dodgers won the World Series in 2020."
+                        },
+                        new ChatGPTChatCompletionMessage()
+                        {
+                            Role = ChatGPTMessageRoles.User,
+                            Content = "Where was it played?"
+                        }
+                    },
+                Temperature = 0.7f,
+                MaxTokens = 100
+            };
+
+            using (var client = ChatGPTTestUtilties.GetClient())
+            {
+                var response = await client.CreateChatCompletionAsync(gptRequest);
+
+                Assert.NotNull(response);
+
+                var message = response.GetMessage();
+
+                Assert.NotNull(message);
+
+                Assert.Equal(ChatGPTMessageRoles.Assistant, message.Role);
+
+                Assert.NotNull(response.Choices);
+
+                Assert.Single(response.Choices);
+
+                Assert.Equal("stop", response.Choices[0].FinishReason);
+
+                Assert.True(!string.IsNullOrWhiteSpace(response.GetCompletionText()));
+            }
+        }
 
 
 
